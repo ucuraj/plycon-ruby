@@ -1,5 +1,7 @@
 module Polycon
   module Commands
+    autoload :Professional, 'polycon/models/professional'
+
     module Professionals
       class Create < Dry::CLI::Command
         desc 'Create a professional'
@@ -7,12 +9,17 @@ module Polycon
         argument :name, required: true, desc: 'Full name of the professional'
 
         example [
-          '"Alma Estevez"      # Creates a new professional named "Alma Estevez"',
-          '"Ernesto Fernandez" # Creates a new professional named "Ernesto Fernandez"'
-        ]
+                  '"Alma Estevez"      # Creates a new professional named "Alma Estevez"',
+                  '"Ernesto Fernandez" # Creates a new professional named "Ernesto Fernandez"'
+                ]
 
         def call(name:, **)
-          warn "TODO: Implementar creación de un o una profesional con nombre '#{name}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          begin
+            Professional.new(name).save
+            puts "The professional has been successfully saved to Polycon"
+          rescue Professional::Exists => e
+            warn e.to_s
+          end
         end
       end
 
@@ -22,9 +29,9 @@ module Polycon
         argument :name, required: true, desc: 'Name of the professional'
 
         example [
-          '"Alma Estevez"      # Deletes a new professional named "Alma Estevez" if they have no appointments',
-          '"Ernesto Fernandez" # Deletes a new professional named "Ernesto Fernandez" if they have no appointments'
-        ]
+                  '"Alma Estevez"      # Deletes a new professional named "Alma Estevez" if they have no appointments',
+                  '"Ernesto Fernandez" # Deletes a new professional named "Ernesto Fernandez" if they have no appointments'
+                ]
 
         def call(name: nil)
           warn "TODO: Implementar borrado de la o el profesional con nombre '#{name}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
@@ -35,11 +42,11 @@ module Polycon
         desc 'List professionals'
 
         example [
-          "          # Lists every professional's name"
-        ]
+                  "          # Lists every professional's name"
+                ]
 
         def call(*)
-          warn "TODO: Implementar listado de profesionales.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          Professional.list
         end
       end
 
@@ -50,8 +57,8 @@ module Polycon
         argument :new_name, required: true, desc: 'New name for the professional'
 
         example [
-          '"Alna Esevez" "Alma Estevez" # Renames the professional "Alna Esevez" to "Alma Estevez"',
-        ]
+                  '"Alna Esevez" "Alma Estevez" # Renames the professional "Alna Esevez" to "Alma Estevez"',
+                ]
 
         def call(old_name:, new_name:, **)
           warn "TODO: Implementar renombrado de profesionales con nombre '#{old_name}' para que pase a llamarse '#{new_name}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
