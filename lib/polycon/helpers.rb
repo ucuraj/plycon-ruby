@@ -1,6 +1,6 @@
 module Polycon
   module Helpers
-    autoload :Text, 'polycon/helpers/text'
+    autoload :TextHelper, 'polycon/helpers/text'
   end
 end
 

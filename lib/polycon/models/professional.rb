@@ -1,9 +1,8 @@
 class Professional
   autoload :FileManager, 'polycon/modules/FileManager'
-  autoload :Text, 'polycon/helpers/text'
+  autoload :TextHelper, 'polycon/helpers/text'
 
   include FileManager
-  include Text
 
   SAVE_BASE_PATH = ""
 
@@ -15,7 +14,7 @@ class Professional
   end
 
   def dir_name
-    to_snake_case(@name).split.join
+    TextHelper.to_snake_case(@name).split.join
   end
 
   def full_path
@@ -44,7 +43,7 @@ class Professional
     puts "\n PROFESSIONAL LIST\n\n"
     puts bar
     if professionals.any?
-      puts professionals.each_with_index.map { |p, i| "#{i + 1}. #{snake_to_spaced(p.basename.to_s)}" }
+      puts professionals.each_with_index.map { |p, i| "#{i + 1}. #{TextHelper.snake_to_spaced(p.basename.to_s)}" }
     else
       puts "No professionals available"
     end

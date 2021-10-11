@@ -1,16 +1,9 @@
-module Text
-  def self.included(base)
-    base.send :include, TextBase
-    base.extend TextBase
+class TextHelper
+  def self.to_snake_case(string)
+    string.gsub(/(.)([A-Z])/, '\1_\2')
   end
 
-  module TextBase
-    def to_snake_case(string)
-      string.gsub(/(.)([A-Z])/, '\1_\2')
-    end
-
-    def snake_to_spaced(string)
-      string.gsub(/(_)/, ' ')
-    end
+  def self.snake_to_spaced(string)
+    string.gsub(/(_)/, ' ')
   end
 end
