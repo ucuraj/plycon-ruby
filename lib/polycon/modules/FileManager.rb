@@ -29,7 +29,7 @@ module FileManager
         end
         return path
       rescue Errno::EACCES
-        warn "Error al crear directorio #{path}. No tenés permisos suficientes"
+        warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
       end
     end
 
@@ -41,7 +41,11 @@ module FileManager
     end
 
     def dir_exists?(path)
-      File.exists? File.join(BASE_PATH, path)
+      File.exists? File.join(BASE_PATH, path) and File.directory? File.join(BASE_PATH, path)
+    end
+
+    def file_exists?(path)
+      File.exists? File.join(BASE_PATH, path) and File.file? File.join(BASE_PATH, path)
     end
 
     def check_base_dir
@@ -50,19 +54,22 @@ module FileManager
 
     ##
     # Persiste informacion en disco
-    # file_path es una ruta relativa. Todas las carpetas/archivos se deben crear dentro de BASE_PATH
-    # file_name es el nombre del archivo
-    #
-    def persist_data(file_dir_path, file_name, data, file_ext = DEFAULT_FILE_EXT)
+    # data
+    def persist_data(file_dir_path, file_name, data, **kwargs)
+
+      file_ext = kwargs[:file_ext] || DEFAULT_FILE_EXT
+      mode = kwargs[:mode] || "w"
+      array = kwargs[:array] || true
+
       if check_base_dir
         full_dir_path = File.join(BASE_PATH, file_dir_path)
         full_file_path = File.join(full_dir_path, file_name.concat(file_ext))
         begin
-          File.open(full_file_path, "w") { |f| f.write data }
+          array ? File.write(full_file_path, data.join("\n"), mode: mode) : File.write(full_file_path, data, mode: mode)
         rescue Errno::EACCES
-          warn "Error al crear archivo #{full_file_path}. No tenés permisos suficientes"
+          warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
         rescue Errno::ENOENT
-          warn "Error al crear archivo #{full_file_path}."
+          warn "Error trying to create file #{full_file_path}."
         end
       end
     end
@@ -71,14 +78,14 @@ module FileManager
       if check_base_dir
         full_path = File.join(BASE_PATH, path)
         begin
-          unless dir_exists? full_path
+          unless dir_exists? path
             Dir.mkdir(full_path)
           end
           return true
         rescue Errno::EACCES
-          warn "Error al crear directorio #{full_path}. No tenés permisos suficientes"
+          warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
         rescue Errno::ENOENT
-          warn "Error al crear directorio #{full_path}."
+          warn "Error trying to create dir #{full_path}."
         end
       end
       false
@@ -89,7 +96,7 @@ module FileManager
         begin
           Pathname.new(get_abs_path(path)).children.select { |c| c.directory? }
         rescue Errno::ENOENT
-          warn "No existe el directorio #{get_abs_path(path)}"
+          warn "Dir '#{get_abs_path(path)}' not found"
           []
         end
       end
@@ -100,7 +107,7 @@ module FileManager
         begin
           Pathname.new(get_abs_path(path)).children.select { |c| c.file? }
         rescue Errno::ENOENT
-          warn "No existe el directorio #{get_abs_path(path)}"
+          warn "Dir '#{get_abs_path(path)}' not found"
           []
         end
       end
@@ -111,9 +118,45 @@ module FileManager
         begin
           Pathname.new(get_abs_path(path)).children
         rescue Errno::ENOENT
-          warn "No existe el directorio #{get_abs_path(path)}"
+          warn "Dir '#{get_abs_path(path)}' not found"
           []
         end
+      end
+    end
+
+    def read_file(path, raise_exception = true, exception = Errno::ENOENT)
+      if file_exists? path
+        begin
+          File.read(get_abs_path(path)).split("\n") # retorno el contenido del archivo
+        rescue Errno::EACCES
+          warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
+        end
+      elsif raise_exception
+        raise exception
+      end
+    end
+
+    def delete_dir(path, raise_exception = true, exception = Errno::ENOENT)
+      if dir_exists? path
+        begin
+          FileUtils.rm_rf(get_abs_path(path))
+        rescue Errno::EACCES
+          warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
+        end
+      elsif raise_exception
+        raise exception
+      end
+    end
+
+    def rename_dir(path, new_path, raise_exception = true, exception = Errno::ENOENT)
+      if dir_exists? path
+        begin
+          File.rename get_abs_path(path), get_abs_path(new_path)
+        rescue Errno::EACCES
+          warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
+        end
+      elsif raise_exception
+        raise exception
       end
     end
 
