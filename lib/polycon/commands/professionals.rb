@@ -1,7 +1,5 @@
 module Polycon
   module Commands
-    autoload :Professional, 'polycon/models/professional'
-
     module Professionals
       class Create < Dry::CLI::Command
         desc 'Create a professional'
@@ -15,9 +13,9 @@ module Polycon
 
         def call(name:, **)
           begin
-            Professional.new(name).save
+            Polycon::Models::Professional.new(name).save
             puts "The professional has been successfully saved to Polycon"
-          rescue Professional::Exists => e
+          rescue Polycon::Models::Professional::Exists => e
             warn e.to_s
           end
         end
@@ -34,7 +32,7 @@ module Polycon
                 ]
 
         def call(name: nil)
-          Professional.delete(name)
+          Polycon::Models::Professional.delete(name)
         end
       end
 
@@ -46,7 +44,7 @@ module Polycon
                 ]
 
         def call(*)
-          Professional.list
+          Polycon::Models::Professional.list
         end
       end
 
@@ -61,7 +59,7 @@ module Polycon
                 ]
 
         def call(old_name:, new_name:, **)
-          Professional.rename(old_name, new_name)
+          Polycon::Models::Professional.rename(old_name, new_name)
         end
       end
     end
