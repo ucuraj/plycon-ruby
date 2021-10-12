@@ -1,6 +1,8 @@
 module Polycon
   module Modules
-    autoload :FileManager, 'polycon/modules/FileManager'
+    module FileManager
+      autoload :FileManager, 'polycon/modules/FileManager'
+    end
   end
 end
 
