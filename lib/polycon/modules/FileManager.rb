@@ -48,6 +48,10 @@ module Polycon
           File.exists? File.join(BASE_PATH, path) and File.file? File.join(BASE_PATH, path)
         end
 
+        def path_file_exists?(path, filename)
+          File.exists? File.join(BASE_PATH, path, filename) and File.file? File.join(BASE_PATH, path, filename)
+        end
+
         def check_base_dir
           dir_get_or_create BASE_PATH
         end
@@ -140,6 +144,18 @@ module Polycon
           if dir_exists? path
             begin
               FileUtils.rm_rf(get_abs_path(path))
+            rescue Errno::EACCES
+              warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
+            end
+          elsif raise_exception
+            raise exception
+          end
+        end
+
+        def delete_file(path, filename, raise_exception = true, exception = Errno::ENOENT)
+          if dir_exists? path
+            begin
+              FileUtils.rm(get_abs_path(File.join(path, filename)))
             rescue Errno::EACCES
               warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
             end
