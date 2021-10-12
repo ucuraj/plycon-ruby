@@ -55,6 +55,33 @@ module Polycon
         appointments_list.any?
       end
 
+      def appointment(appointment)
+        last_name, first_name, phone, obs = read_file(File.join(rel_path, appointment.filename_ext), true, exception = Polycon::Models::Appointment::NotFound)
+        Polycon::Models::Appointment.new(last_name.to_s, first_name.to_s, phone.to_s, @name, appointment.date, obs.to_s)
+      end
+
+      def cancel_appointment appointment
+        begin
+          delete_file(rel_path, appointment.filename_ext)
+          puts "Appointment cancelled"
+        rescue => e
+          warn "Error cancelling appointment"
+        end
+      end
+
+      def cancel_all_appointments
+        if has_appointments?
+          begin
+            appointments_list.map { |ap| delete_file(rel_path, ap.basename) }
+            return warn "All appointments were deleted"
+          rescue => e
+            warn "Error cancelling appointment"
+            return
+          end
+        end
+        warn "Professional #{@name} has no appointments"
+      end
+
       def to_s
         super
         "#{@name} - Registrado el #{@date_joined.to_s}"
@@ -70,10 +97,8 @@ module Polycon
 
       def self.list
         professionals = self.professionals_list
-        a = [[1.23, 5, :bagels], [3.14, 7, :gravel], [8.33, 11, :saturn]]
-        bar = '-' * (a[0][0].to_s.length + 4 + a[0][1].to_s.length + 3 + a[0][2].to_s.length + 5)
         puts "\n PROFESSIONAL LIST\n\n"
-        puts bar
+        puts Polycon::Helpers::TextHelper.bar
 
         if professionals.any?
           puts professionals.each_with_index.map { |p, i| "#{i + 1}. #{Polycon::Helpers::TextHelper.snake_to_spaced(p.basename.to_s)}" }
@@ -81,7 +106,7 @@ module Polycon
           puts "No professionals available"
         end
 
-        return puts "#{bar}\n\n"
+        return puts "#{Polycon::Helpers::TextHelper.bar}\n\n"
       end
 
       def self.search(name)
