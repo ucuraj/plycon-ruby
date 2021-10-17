@@ -79,8 +79,8 @@ module Polycon
                   '"Alma Estevez" --date="2021-09-16" # Lists appointments for Alma Estevez on the specified date'
                 ]
 
-        def call(professional:)
-          warn "TODO: Implementar listado de turnos de la o el profesional '#{professional}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+        def call(professional:, **options)
+          Polycon::Models::Appointment.list_appointments(professional, **options)
         end
       end
 
@@ -96,7 +96,7 @@ module Polycon
                 ]
 
         def call(old_date:, new_date:, professional:)
-          warn "TODO: Implementar cambio de fecha de turno con fecha '#{old_date}' para que pase a ser '#{new_date}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          Polycon::Models::Professional.reschedule(old_date, new_date, professional)
         end
       end
 
@@ -117,7 +117,7 @@ module Polycon
                 ]
 
         def call(date:, professional:, **options)
-          warn "TODO: Implementar modificación de un turno de la o el profesional '#{professional}' con fecha '#{date}', para cambiarle la siguiente información: #{options}.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          Polycon::Models::Professional.edit_appointment(date, professional, options)
         end
       end
     end

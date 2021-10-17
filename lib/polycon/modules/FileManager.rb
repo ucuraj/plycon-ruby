@@ -128,7 +128,8 @@ module Polycon
           end
         end
 
-        def read_file(path, raise_exception = true, exception = Errno::ENOENT)
+        def read_file(path, raise_exception = true, exception = Errno::ENOENT, abs_path = false)
+
           if file_exists? path
             begin
               File.read(get_abs_path(path)).split("\n") # retorno el contenido del archivo
@@ -175,6 +176,14 @@ module Polycon
             raise exception
           end
         end
+
+        def rename_file(old_filename, new_filename, raise_exception = true, exception = Errno::ENOENT)
+          if File.exists? old_filename
+            return File.rename old_filename, new_filename
+          end
+          raise_exception ? (raise exception) : (nil)
+        end
+        
       end
     end
   end

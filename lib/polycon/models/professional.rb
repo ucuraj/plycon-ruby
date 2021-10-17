@@ -82,6 +82,85 @@ module Polycon
         warn "Professional #{@name} has no appointments"
       end
 
+      def print_appointments(appointments)
+        appointments.each_with_index.map do |ap_file, i|
+          date = Polycon::Models::Appointment.format_str_date(ap_file)
+          ap = appointment Polycon::Models::Appointment.new("", "", "", @name, date)
+          puts "#{i + 1}. #{appointment(ap)}"
+        end
+      end
+
+      def list_all_appointments
+        print_appointments appointments_list
+      end
+
+      def list_appointments_by_date(date)
+        begin
+          ap_filtered = appointments_list.select { |ap_file| date.eql? Date.parse(ap_file.basename.to_s.split("_")[0]) }
+          ap_filtered.any? ? (print_appointments ap_filtered) : (puts "No appointments found")
+        rescue Date::Error
+          warn "Invalid date. Check format (YYYY-MM-DD)"
+        end
+      end
+
+      def list_appointments(date = nil)
+        puts "\nAPPOINTMENTS OF #{@name}\n\n"
+        puts Polycon::Helpers::TextHelper.bar
+        begin
+          if has_appointments?
+            date ? list_appointments_by_date(date) : list_all_appointments
+          else
+            puts "No appointments found"
+          end
+          puts "#{Polycon::Helpers::TextHelper.bar}\n\n"
+        rescue Polycon::Models::Appointment::CreateError => e
+          return warn "Cannot retrieve appointments."
+        end
+      end
+
+      def find_appointment(date, raise_exception = false)
+        begin
+          ap_to_search = appointment Polycon::Models::Appointment.new("", "", "", @name, date)
+          return appointments_list.select { |ap_file| ap_file.basename.to_s.eql? ap_to_search.filename_ext }[0]
+        rescue Polycon::Models::Appointment::NotFound => e
+          raise_exception ? (raise e) : (nil)
+        end
+      end
+
+      def rename_appointment(old_file, new_filename)
+        begin
+          rename_file old_file, new_filename, true
+          puts "Appointment successfully rescheduled."
+        rescue Errno::ENOENT => e
+          warn "Can not rename appointment"
+        end
+      end
+
+      def reschedule(old_date, new_date)
+        begin
+          old_appointment = find_appointment(old_date, true)
+          new_appointment = find_appointment(new_date)
+        rescue Polycon::Models::Appointment::NotFound => e
+          return warn e
+        end
+
+        if new_appointment
+          return warn "Found appointment with date #{new_date.to_s}. Select another date to reschedule appointment"
+        end
+        new_filename = Pathname.new(old_appointment.dirname).join Polycon::Models::Appointment.new("", "", "", @name, new_date).filename_ext
+        rename_appointment old_appointment, new_filename
+      end
+
+      def edit_appointment(date, **args)
+        begin
+          appoint = appointment Polycon::Models::Appointment.new("", "", "", @name, date)
+          appoint.edit(args)
+          appoint.save(true)
+        rescue Polycon::Models::Appointment::NotFound => e
+          return warn e
+        end
+      end
+
       def to_s
         super
         "#{@name} - Registrado el #{@date_joined.to_s}"
@@ -108,6 +187,8 @@ module Polycon
 
         return puts "#{Polycon::Helpers::TextHelper.bar}\n\n"
       end
+
+      private :appointments_list
 
       def self.search(name)
         prof_dir = Polycon::Helpers::TextHelper.to_snake_case(name).split.join
@@ -171,6 +252,26 @@ module Polycon
         end
       end
 
+      def self.reschedule(old_date, new_date, professional)
+        begin
+          prof = self.search professional
+          prof.has_appointments? ? (prof.reschedule(old_date, new_date)) : (warn "The professional #{prof.name} does not have appointments")
+        rescue Professional::NotFound, Polycon::Models::Appointment::NotFound => e
+          warn e
+        end
+      end
+
+      def self.edit_appointment(date, professional, **args)
+        begin
+          prof = self.search professional
+          prof.has_appointments? ? (prof.edit_appointment(date, args)) : (warn "The professional #{prof.name} does not have appointments")
+        rescue Professional::NotFound, Polycon::Models::Appointment::NotFound => e
+          warn e
+        rescue Date::Error
+          warn "Invalid date. Check format (YYYY-MM-DD)"
+        end
+      end
+
       ##
       # Exceptions
       #
@@ -188,3 +289,4 @@ module Polycon
     end
   end
 end
+

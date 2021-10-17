@@ -34,9 +34,25 @@ module Polycon
         @date.strftime(DEFAULT_STRFTIME)
       end
 
-      def save
+      def edit(**args)
+        args[:name] && (@patient_first_name = args[:name])
+        args[:surname] && (@patient_last_name = args[:surname])
+        args[:notes] && (@observations = args[:notes])
+      end
+
+      def save(edit = false)
         data = [@patient_last_name, @patient_first_name, @patient_phone, @observations]
         path = @professional.rel_path
+
+        if edit
+          if path_file_exists?(path, filename_ext)
+            persist_data(path, filename, data)
+            return puts "Appointment updated"
+          else
+            raise NotFound
+          end
+        end
+
         if path_file_exists?(path, filename_ext)
           raise CreateError.new(extra: "There is already an appointment for the professional #{professional.name} with date #{@date}")
         end
@@ -63,6 +79,10 @@ module Polycon
           return warn "Aborted."
         end
         @professional.cancel_appointment self
+      end
+
+      def to_s
+        "#{@date} - #{@patient_first_name} #{@patient_last_name}"
       end
 
       ##
@@ -118,6 +138,24 @@ module Polycon
         end
       end
 
+      def self.list_appointments(professional, **args)
+        begin
+          prof = Polycon::Models::Professional.search(professional)
+          date = Date.parse args[:date] if args[:date]
+          prof.list_appointments(date)
+        rescue Polycon::Models::Professional::NotFound => e
+          warn e.to_s
+        rescue Date::Error
+          warn "Invalid date. Check format (YYYY-MM-DD)"
+        end
+      end
+
+      def self.format_str_date(ap_file, split = "_", join = " ")
+        date = File.basename(ap_file, ap_file.extname).split(split).join(join)
+        date[-3] = ":"
+        date
+      end
+
       ##
       # Exceptions
       #
@@ -139,7 +177,6 @@ module Polycon
           super
         end
       end
-
     end
   end
 end
