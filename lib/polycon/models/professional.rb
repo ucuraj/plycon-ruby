@@ -212,6 +212,7 @@ module Polycon
         rescue FileManager::FileError
           raise NotFound
         end
+        raise NotFound
       end
 
       def self.delete(name)
