@@ -15,7 +15,7 @@ module Polycon
           begin
             Polycon::Models::Professional.new(name).save
             puts "The professional has been successfully saved to Polycon"
-          rescue Polycon::Models::Professional::Exists => e
+          rescue Polycon::Models::Professional::Exists, Polycon::Models::Professional::CreateError => e
             warn e.to_s
           end
         end

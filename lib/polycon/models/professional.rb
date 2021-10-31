@@ -13,6 +13,9 @@ module Polycon
       # initialize method
       def initialize(name, date_joined = Time.now)
         # variables
+        if name.strip.empty?
+          raise CreateError
+        end
         @name = name
         @date_joined = date_joined
       end
@@ -56,8 +59,12 @@ module Polycon
       end
 
       def appointment(appointment)
-        last_name, first_name, phone, obs = read_file(File.join(rel_path, appointment.filename_ext), true, exception = Polycon::Models::Appointment::NotFound)
-        Polycon::Models::Appointment.new(last_name.to_s, first_name.to_s, phone.to_s, @name, appointment.date, obs.to_s)
+        begin
+          last_name, first_name, phone, obs = read_file(File.join(rel_path, appointment.filename_ext))
+          Polycon::Models::Appointment.new(last_name.to_s, first_name.to_s, phone.to_s, @name, appointment.date, obs.to_s)
+        rescue FileManager::FileError
+          raise Polycon::Models::Appointment::NotFound
+        end
       end
 
       def cancel_appointment appointment
@@ -131,7 +138,7 @@ module Polycon
         begin
           rename_file old_file, new_filename, true
           puts "Appointment successfully rescheduled."
-        rescue Errno::ENOENT => e
+        rescue Errno::ENOENT, FileManager::FileNotFound => e
           warn "Can not rename appointment"
         end
       end
@@ -195,13 +202,16 @@ module Polycon
         prof_file = File.join(SAVE_BASE_PATH, prof_dir, PROFESSIONAL_DATA_FILE)
 
         result = self.professionals_list.select { |prof| prof.basename.to_s == prof_dir }
-        if result.any?
-          begin
-            prof_name, prof_date_joined = read_file(prof_file, true, NotFound)
-            return Professional.new(prof_name.to_s, prof_date_joined.to_s)
+        begin
+          if result.any?
+            begin
+              prof_name, prof_date_joined = read_file(prof_file)
+              return Professional.new(prof_name.to_s, prof_date_joined.to_s)
+            end
           end
+        rescue FileManager::FileError
+          raise NotFound
         end
-        raise NotFound
       end
 
       def self.delete(name)
@@ -217,7 +227,11 @@ module Polycon
             return warn "Canceled."
           end
 
-          delete_dir(professional.dir_name)
+          begin
+            delete_dir(professional.dir_name)
+          rescue FileManager::DirNotFound
+            warn "Can not delete professional."
+          end
           puts "Professional #{professional.name} has been deleted."
         rescue NotFound => e
           warn e
@@ -232,7 +246,7 @@ module Polycon
         end
 
         prof_file = File.join(professional.dir_name, PROFESSIONAL_DATA_FILE)
-        _, prof_date_joined = read_file(prof_file, raise_exception = true, exception = Errno::ENOENT)
+        _, prof_date_joined = read_file(prof_file)
 
         if professional.has_appointments?
           return warn "#{professional.name} has appointments. Cannot be rename TODO"
@@ -283,6 +297,12 @@ module Polycon
 
       class NotFound < StandardError
         def initialize(msg = "The professional is not registered in Polycon")
+          super
+        end
+      end
+
+      class CreateError < StandardError
+        def initialize(msg = "Error creating professional, field 'name' cannot be blank")
           super
         end
       end

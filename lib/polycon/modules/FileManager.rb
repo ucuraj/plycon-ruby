@@ -128,7 +128,7 @@ module Polycon
           end
         end
 
-        def read_file(path, raise_exception = true, exception = Errno::ENOENT, abs_path = false)
+        def read_file(path, raise_exception = true, abs_path = false)
 
           if file_exists? path
             begin
@@ -137,11 +137,11 @@ module Polycon
               warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
             end
           elsif raise_exception
-            raise exception
+            raise FileManager::FileError
           end
         end
 
-        def delete_dir(path, raise_exception = true, exception = Errno::ENOENT)
+        def delete_dir(path, raise_exception = true)
           if dir_exists? path
             begin
               FileUtils.rm_rf(get_abs_path(path))
@@ -149,11 +149,11 @@ module Polycon
               warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
             end
           elsif raise_exception
-            raise exception
+            raise FileManager::DirNotFound
           end
         end
 
-        def delete_file(path, filename, raise_exception = true, exception = Errno::ENOENT)
+        def delete_file(path, filename, raise_exception = true)
           if dir_exists? path
             begin
               FileUtils.rm(get_abs_path(File.join(path, filename)))
@@ -161,11 +161,11 @@ module Polycon
               warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
             end
           elsif raise_exception
-            raise exception
+            raise FileManager::DirNotFound
           end
         end
 
-        def rename_dir(path, new_path, raise_exception = true, exception = Errno::ENOENT)
+        def rename_dir(path, new_path, raise_exception = true)
           if dir_exists? path
             begin
               File.rename get_abs_path(path), get_abs_path(new_path)
@@ -173,17 +173,41 @@ module Polycon
               warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
             end
           elsif raise_exception
-            raise exception
+            raise FileManager::DirNotFound
           end
         end
 
-        def rename_file(old_filename, new_filename, raise_exception = true, exception = Errno::ENOENT)
+        def rename_file(old_filename, new_filename, raise_exception = true)
           if File.exists? old_filename
             return File.rename old_filename, new_filename
           end
-          raise_exception ? (raise exception) : (nil)
+          raise_exception ? (raise FileManager::FileNotFound) : (nil)
         end
-        
+
+        class FileError < StandardError
+          def initialize(msg="File error")
+            super
+          end
+        end
+
+        class FileNotFound < StandardError
+          def initialize(msg="Cannot open file")
+            super
+          end
+        end
+
+        class DirNotFound < StandardError
+          def initialize(msg="Cannot open directory")
+            super
+          end
+        end
+
+        class RenameError < StandardError
+          def initialize(msg="Cannot rename file")
+            super
+          end
+        end
+
       end
     end
   end
