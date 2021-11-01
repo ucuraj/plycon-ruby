@@ -117,7 +117,49 @@ module Polycon
                 ]
 
         def call(date:, professional:, **options)
-          Polycon::Models::Professional.edit_appointment(date, professional, options)
+          begin
+            Polycon::Models::Professional.edit_appointment(date, professional, options)
+          rescue Polycon::Models::Appointment::InvalidMinuteError, Polycon::Models::Appointment::InvalidHourError => e
+            warn e
+          end
+        end
+      end
+
+      class ExportDay < Dry::CLI::Command
+        desc 'Export grid of appointments(day) for a date. optionally filtered by a professional'
+
+        argument :date, required: true, desc: 'Full date for the appointment'
+        option :professional, required: false, desc: 'Full name of the professional'
+
+        example [
+                  '--date "2021-09-16 13:00" --professional="Alma Estevez"',
+                ]
+
+        def call(date:, **options)
+          begin
+            Polycon::Outputs::AppointmentGridView.output_day(date, options)
+          rescue Polycon::Models::Professional::NotFound => e
+            warn e
+          end
+        end
+      end
+
+      class ExportWeek < Dry::CLI::Command
+        desc 'Export grid of appointments(week) for a date. optionally filtered by a professional'
+
+        argument :date, required: true, desc: 'Full date for the appointment'
+        option :professional, required: false, desc: 'Full name of the professional'
+
+        example [
+                  '--date "2021-09-16 13:00" --professional="Alma Estevez"',
+                ]
+
+        def call(date:, **options)
+          begin
+            Polycon::Outputs::AppointmentGridView.output_week(date, options)
+          rescue Polycon::Models::Professional::NotFound => e
+            warn e
+          end
         end
       end
     end

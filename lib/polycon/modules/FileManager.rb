@@ -137,7 +137,7 @@ module Polycon
               warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
             end
           elsif raise_exception
-            raise FileManager::FileError
+            raise FileError
           end
         end
 
@@ -149,7 +149,7 @@ module Polycon
               warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
             end
           elsif raise_exception
-            raise FileManager::DirNotFound
+            raise DirNotFound
           end
         end
 
@@ -161,7 +161,7 @@ module Polycon
               warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
             end
           elsif raise_exception
-            raise FileManager::DirNotFound
+            raise DirNotFound
           end
         end
 
@@ -173,7 +173,7 @@ module Polycon
               warn "Permission Error. Check your permissions of base path(#{BASE_PATH})"
             end
           elsif raise_exception
-            raise FileManager::DirNotFound
+            raise DirNotFound
           end
         end
 
@@ -181,7 +181,7 @@ module Polycon
           if File.exists? old_filename
             return File.rename old_filename, new_filename
           end
-          raise_exception ? (raise FileManager::FileNotFound) : (nil)
+          raise_exception ? (raise FileNotFound) : (nil)
         end
 
         class FileError < StandardError

@@ -1,3 +1,6 @@
+require 'date'
+require 'time'
+
 module Polycon
   module Models
     class Professional
@@ -54,6 +57,27 @@ module Polycon
         list_files(rel_path).select { |file| file.basename.to_s != PROFESSIONAL_DATA_FILE }
       end
 
+      def appointments_by_date(date)
+        begin
+          ap_filtered = appointments_list.select { |ap_file| date.eql? Date.parse(ap_file.basename.to_s.split("_")[0]) }
+          if ap_filtered.any?
+            return ap_filtered.map do |ap_file, i|
+              date = Polycon::Models::Appointment.format_str_date(ap_file)
+              ap = appointment Polycon::Models::Appointment.new("", "", "", @name, date)
+              appointment(ap)
+            end
+          end
+          []
+        rescue Date::Error
+          warn "Invalid date. Check format (YYYY-MM-DD)"
+        end
+      end
+
+      def appointment_by_date(date)
+        ap = appointment Polycon::Models::Appointment.new("", "", "", @name, date)
+        appointment(ap)
+      end
+
       def has_appointments?
         appointments_list.any?
       end
@@ -61,8 +85,8 @@ module Polycon
       def appointment(appointment)
         begin
           last_name, first_name, phone, obs = read_file(File.join(rel_path, appointment.filename_ext))
-          Polycon::Models::Appointment.new(last_name.to_s, first_name.to_s, phone.to_s, @name, appointment.date, obs.to_s)
-        rescue FileManager::FileError
+          return Polycon::Models::Appointment.new(last_name.to_s, first_name.to_s, phone.to_s, @name, appointment.date, obs.to_s)
+        rescue Polycon::Modules::FileManager::FileManagerBase::FileError
           raise Polycon::Models::Appointment::NotFound
         end
       end
@@ -149,6 +173,8 @@ module Polycon
           new_appointment = find_appointment(new_date)
         rescue Polycon::Models::Appointment::NotFound => e
           return warn e
+        rescue Polycon::Models::Appointment::CreateError => e
+          return warn e
         end
 
         if new_appointment
@@ -163,8 +189,12 @@ module Polycon
           appoint = appointment Polycon::Models::Appointment.new("", "", "", @name, date)
           appoint.edit(args)
           appoint.save(true)
+        rescue Polycon::Models::Appointment::InvalidHourError, Polycon::Models::Appointment::InvalidMinuteError => e
+          return warn e.to_s
         rescue Polycon::Models::Appointment::NotFound => e
           return warn e
+        rescue Polycon::Modules::FileManager::FileManagerBase::FileError
+          raise Polycon::Models::Appointment::NotFound
         end
       end
 
@@ -176,6 +206,14 @@ module Polycon
       ##
       # Class Methods
       #
+
+      def self.professionals
+        self.professionals_list.map do |prof|
+          prof_file = File.join(SAVE_BASE_PATH, prof.basename, PROFESSIONAL_DATA_FILE)
+          prof_name, prof_date_joined = read_file(prof_file)
+          Professional.new(prof_name.to_s, prof_date_joined.to_s)
+        end
+      end
 
       def self.professionals_list
         list_dirs(SAVE_BASE_PATH).select { |prof| file_exists? File.join(prof.basename, PROFESSIONAL_DATA_FILE) }
@@ -209,7 +247,7 @@ module Polycon
               return Professional.new(prof_name.to_s, prof_date_joined.to_s)
             end
           end
-        rescue FileManager::FileError
+        rescue Polycon::Modules::FileManager::FileManagerBase::FileError
           raise NotFound
         end
         raise NotFound
@@ -249,10 +287,6 @@ module Polycon
         prof_file = File.join(professional.dir_name, PROFESSIONAL_DATA_FILE)
         _, prof_date_joined = read_file(prof_file)
 
-        if professional.has_appointments?
-          return warn "#{professional.name} has appointments. Cannot be rename TODO"
-        end
-
         begin
           old_path = professional.rel_path
           professional.name = new_name
@@ -280,7 +314,7 @@ module Polycon
         begin
           prof = self.search professional
           prof.has_appointments? ? (prof.edit_appointment(date, args)) : (warn "The professional #{prof.name} does not have appointments")
-        rescue Professional::NotFound, Polycon::Models::Appointment::NotFound => e
+        rescue Professional::NotFound, Polycon::Models::Appointment::NotFound, Polycon::Models::Appointment::CreateError => e
           warn e
         rescue Date::Error
           warn "Invalid date. Check format (YYYY-MM-DD)"

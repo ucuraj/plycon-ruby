@@ -131,3 +131,34 @@ lectura/escritura de archivos y directorios.
 
 Los helpers pueden ser clases o funciones útiles que están disponibles para poder utilizarlos cuando sea necesario, como
 por ejemplo la funcion snake_case de TextHelper que dado un string lo convierte a snake_case.
+
+### Appointments Grid
+
+**El sistema cuenta con restricciones a la hora de crear turnos, para simplificar el manejo de los mismos**
+
+Los turnos son de 15 minutos.
+
+- Hay 4 turnos por hora, arrancando en el minuto 0 de cada hora. En total sería 00, 15, 30, 45.
+- Por ejemplo para las 11am, se pueden reservar turnos a las 11:00, 11:15, 11:30 u 11:45.
+
+Un profesional no posee turnos solapados.
+
+Se pueden reservar turnos entre las 8 AM y las 4 PM.
+
+#
+
+Se agregó el namespace **Outputs**, el cual actualmente se encarga de generar la salida de los turnos por dia/semana
+permitiendo filtrar por profesional
+
+Los turnos se exportan en una grilla en formato HTML, aprovechando el uso de la gema erb, que nos permite de manera
+sencilla crear templates html dinámicos.
+
+Los turnos diarios filtrados sin filtro por professional se guardan en la carpeta .polycon(home usuario) con el
+formato "output_day_[DATE].html"
+
+Los turnos diarios filtrados por profesional se guardan en la carpeta del profesional .polycon/PROF (home usuario) con
+el formato "output_day_[DATE].html"
+
+Para filtrar una grilla de turnos semanales por fecha, a partir de la fecha recibida se calcula la semana actual. La
+semana comienza el dia lunes
+

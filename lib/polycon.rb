@@ -4,6 +4,7 @@ module Polycon
   autoload :Models, 'polycon/models'
   autoload :Modules, 'polycon/modules'
   autoload :Helpers, 'polycon/helpers'
+  autoload :Outputs, 'polycon/outputs'
 
   # Agregar aquí cualquier autoload que sea necesario para que se cargue las clases y
   # módulos del modelo de datos.

@@ -7,12 +7,21 @@ module Polycon
 
       APPOINTMENT_DATA_FILE_EXT = ".paf"
       DEFAULT_STRFTIME = "%Y-%m-%d_%H-%M"
+      VALID_MINUTES = [0, 15, 30, 45]
+      HOURS_RANGE = (8..15).to_a
 
       attr_accessor :patient_first_name, :patient_last_name, :patient_phone, :professional, :date, :observations
 
       def initialize(patient_first_name, patient_last_name, patient_phone, professional_name, date, observations = "")
         # variables
         begin
+          d = Time.parse(date.to_s).to_time
+          unless VALID_MINUTES.include? d.min
+            raise InvalidMinuteError
+          end
+          unless HOURS_RANGE.include? d.hour
+            raise InvalidHourError
+          end
           @patient_first_name = patient_first_name
           @patient_last_name = patient_last_name
           @patient_phone = patient_phone
@@ -21,8 +30,12 @@ module Polycon
           @observations = observations
         rescue Polycon::Models::Professional::NotFound => e
           raise CreateError.new(extra: "Professional #{professional_name} not found")
+        rescue InvalidMinuteError => e
+          raise CreateError.new(extra: "Invalid date. Date minutes must be between 00, 15, 30, 45")
+        rescue InvalidHourError => e
+          raise CreateError.new(extra: "Invalid date. Date hours must be between #{HOURS_RANGE}")
         rescue ArgumentError => e
-          raise CreateError.new(extra: "Invalid date")
+          raise CreateError.new(extra: "Invalid date.")
         end
       end
 
@@ -82,7 +95,7 @@ module Polycon
       end
 
       def to_s
-        "#{@date} - #{@patient_first_name} #{@patient_last_name}"
+        "#{@date.to_s} - #{@patient_first_name.to_s} #{@patient_last_name.to_s}"
       end
 
       ##
@@ -176,6 +189,12 @@ module Polycon
         def initialize(msg = "Appointment not found in Polycon")
           super
         end
+      end
+
+      class InvalidHourError < StandardError
+      end
+
+      class InvalidMinuteError < StandardError
       end
     end
   end
