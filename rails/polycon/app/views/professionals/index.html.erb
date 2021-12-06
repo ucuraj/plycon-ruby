@@ -1,0 +1,8 @@
+<h1>Professionals#index</h1>
+<ul>
+  <% @professionals.each do |prof| %>
+    <li>
+      <%= link_to "#{prof.first_name} #{prof.last_name}", prof %>
+    </li>
+  <% end %>
+</ul>

@@ -1,0 +1,10 @@
+<h1>Appointments#index</h1>
+<ul>
+  <% @appointments.each do |app| %>
+    <li>
+      <%= link_to "Profesional: #{app.professional.first_name} #{app.professional.last_name}
+      - Paciente: #{app.patient.first_name} #{app.patient.last_name}
+      - Fecha: #{app.date}", app %>
+    </li>
+  <% end %>
+</ul>
