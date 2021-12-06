@@ -1,0 +1,6 @@
+
+<h1>Profesional: <%= link_to "#{@appointment.professional.first_name} #{@appointment.professional.last_name}", @appointment.professional %></h1>
+<h2>Paciente: <%= @appointment.patient.first_name %> <%= @appointment.patient.last_name %></h2>
+<h2>Fecha: <%= @appointment.date %> </h2>
+<h2>Observaciones: <%= @appointment.observations %> </h2>
+<p>Fecha creación: <%= @appointment.created_at %> </p>
