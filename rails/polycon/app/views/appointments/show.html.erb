@@ -1,6 +1,24 @@
+<p id="notice"><%= notice %></p>
 
-<h1>Profesional: <%= link_to "#{@appointment.professional.first_name} #{@appointment.professional.last_name}", @appointment.professional %></h1>
-<h2>Paciente: <%= @appointment.patient.first_name %> <%= @appointment.patient.last_name %></h2>
-<h2>Fecha: <%= @appointment.date %> </h2>
-<h2>Observaciones: <%= @appointment.observations %> </h2>
-<p>Fecha creación: <%= @appointment.created_at %> </p>
+<p>
+  <strong>Observations:</strong>
+  <%= @appointment.observations %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @appointment.date %>
+</p>
+
+<p>
+  <strong>Patient:</strong>
+  <%= link_to "#{@appointment.patient.first_name} #{@appointment.patient.last_name}", @appointment.patient%>
+</p>
+
+<p>
+  <strong>Professional:</strong>
+  <%= link_to "#{@appointment.professional.first_name} #{@appointment.professional.last_name}", @appointment.professional %>
+</p>
+
+<%= link_to 'Edit', edit_appointment_path(@appointment) %> |
+<%= link_to 'Back', appointments_path %>
