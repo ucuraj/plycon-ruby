@@ -18,3 +18,11 @@ Appointment.create([{ date: Time.new(2021, 12, 12, 15, 30), observations: "Turno
                     { date: Time.new(2021, 12, 15, 9, 30), observations: "Turno numero cinco", patient: (patients.at 1), professional: professionals.last },
                     { date: Time.new(2021, 12, 20, 15, 30), observations: "Turno numero seis", patient: (patients.at 3), professional: professionals.last },
                     { date: Time.new(2021, 12, 21, 15, 30), observations: "Turno numero siete", patient: (patients.at 0), professional: professionals.last }])
+
+consultor = Role.create({ name: 'Consultor', description: 'Can read appointments and professionals' })
+asistent = Role.create({ name: 'Asistent', description: 'Can read,create,update and destroy appoointments. Can read professionals' })
+admin = Role.create({ name: 'Admin', description: 'Can perform any CRUD operation on any resource' })
+
+users = User.create([{ name: 'admin', email: 'admin@polycon.com', password: '123456', password_confirmation: '123456', role_id: admin.id },
+                     { name: 'alice', email: 'alice@example.com', password: '123456', password_confirmation: '123456', role_id: asistent.id },
+                     { name: 'bob', email: 'bob@example.com', password: '123456', password_confirmation: '123456', role_id: consultor.id }])
