@@ -10,5 +10,7 @@
   <%= @professional.last_name %>
 </p>
 
-<%= link_to 'Edit', edit_professional_path(@professional) %> |
+<% if can? :update, Professional %>
+  <%= link_to 'Edit', edit_professional_path(@professional) %> |
+<% end %>
 <%= link_to 'Back', professionals_path %>

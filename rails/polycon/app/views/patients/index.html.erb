@@ -4,28 +4,35 @@
 
 <table>
   <thead>
-    <tr>
-      <th>First name</th>
-      <th>Last name</th>
-      <th>Phone</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>First name</th>
+    <th>Last name</th>
+    <th>Phone</th>
+    <th colspan="3"></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @patients.each do |patient| %>
-      <tr>
-        <td><%= patient.first_name %></td>
-        <td><%= patient.last_name %></td>
-        <td><%= patient.phone %></td>
+  <% @patients.each do |patient| %>
+    <tr>
+      <td><%= patient.first_name %></td>
+      <td><%= patient.last_name %></td>
+      <td><%= patient.phone %></td>
+      <% if can? :read, Patient %>
         <td><%= link_to 'Show', patient %></td>
+      <% end %>
+      <% if can? :update, Patient %>
         <td><%= link_to 'Edit', edit_patient_path(patient) %></td>
+      <% end %>
+      <% if can? :destroy, Patient %>
         <td><%= link_to 'Destroy', patient, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
+      <% end %>
+    </tr>
+  <% end %>
   </tbody>
 </table>
 
 <br>
-
-<%= link_to 'New Patient', new_patient_path %>
+<% if can? :create, Patient %>
+  <%= link_to 'New Patient', new_patient_path %>
+<% end %>

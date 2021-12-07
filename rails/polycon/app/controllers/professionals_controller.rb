@@ -1,6 +1,6 @@
 class ProfessionalsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_professional, only: %i[ show edit update destroy ]
+  load_and_authorize_resource
 
   # GET /professionals or /professionals.json
   def index
@@ -13,7 +13,6 @@ class ProfessionalsController < ApplicationController
 
   # GET /professionals/new
   def new
-    @professional = Professional.new
   end
 
   # GET /professionals/1/edit
@@ -22,8 +21,6 @@ class ProfessionalsController < ApplicationController
 
   # POST /professionals or /professionals.json
   def create
-    @professional = Professional.new(professional_params)
-
     respond_to do |format|
       if @professional.save
         format.html { redirect_to @professional, notice: "Professional was successfully created." }
@@ -58,11 +55,6 @@ class ProfessionalsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_professional
-      @professional = Professional.find(params[:id])
-    end
-
     # Only allow a list of trusted parameters through.
     def professional_params
       params.require(:professional).permit(:first_name, :last_name)

@@ -12,13 +12,23 @@
 
 <p>
   <strong>Patient:</strong>
-  <%= link_to "#{@appointment.patient.first_name} #{@appointment.patient.last_name}", @appointment.patient%>
+  <% if can? :read, Patient %>
+    <%= link_to "#{@appointment.patient.first_name} #{@appointment.patient.last_name}", @appointment.patient %>
+  <% else %>
+    <span><% "#{@appointment.patient.first_name} #{@appointment.patient.last_name}" %></span>
+  <% end %>
 </p>
 
 <p>
   <strong>Professional:</strong>
-  <%= link_to "#{@appointment.professional.first_name} #{@appointment.professional.last_name}", @appointment.professional %>
+  <% if can? :read, Professional %>
+    <%= link_to "#{@appointment.professional.first_name} #{@appointment.professional.last_name}", @appointment.professional %>
+  <% else %>
+    <span><% "#{@appointment.professional.first_name} #{@appointment.professional.last_name}" %></span>
+  <% end %>
 </p>
 
-<%= link_to 'Edit', edit_appointment_path(@appointment) %> |
+<% if can? :update, Appointment %>
+  <%= link_to 'Edit', edit_appointment_path(@appointment) %> |
+<% end %>
 <%= link_to 'Back', appointments_path %>

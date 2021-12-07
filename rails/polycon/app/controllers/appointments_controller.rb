@@ -1,6 +1,6 @@
 class AppointmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_appointment, only: %i[ show edit update destroy ]
+  load_and_authorize_resource
 
   # GET /appointments or /appointments.json
   def index
@@ -13,7 +13,6 @@ class AppointmentsController < ApplicationController
 
   # GET /appointments/new
   def new
-    @appointment = Appointment.new
   end
 
   # GET /appointments/1/edit
@@ -22,7 +21,6 @@ class AppointmentsController < ApplicationController
 
   # POST /appointments or /appointments.json
   def create
-    @appointment = Appointment.new(appointment_params)
 
     respond_to do |format|
       if @appointment.save
@@ -58,10 +56,6 @@ class AppointmentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_appointment
-      @appointment = Appointment.find(params[:id])
-    end
 
     # Only allow a list of trusted parameters through.
     def appointment_params

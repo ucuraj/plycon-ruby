@@ -9,4 +9,8 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:account_create, keys: [:name, :email])
   end
 
+  rescue_from CanCan::AccessDenied do
+    flash[:error] = 'Access denied!'
+    redirect_to root_url
+  end
 end

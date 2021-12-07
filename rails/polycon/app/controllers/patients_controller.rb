@@ -1,6 +1,6 @@
 class PatientsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_patient, only: %i[ show edit update destroy ]
+  load_and_authorize_resource
 
   # GET /patients or /patients.json
   def index
@@ -13,7 +13,6 @@ class PatientsController < ApplicationController
 
   # GET /patients/new
   def new
-    @patient = Patient.new
   end
 
   # GET /patients/1/edit
@@ -22,8 +21,6 @@ class PatientsController < ApplicationController
 
   # POST /patients or /patients.json
   def create
-    @patient = Patient.new(patient_params)
-
     respond_to do |format|
       if @patient.save
         format.html { redirect_to @patient, notice: "Patient was successfully created." }
@@ -58,11 +55,6 @@ class PatientsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_patient
-      @patient = Patient.find(params[:id])
-    end
-
     # Only allow a list of trusted parameters through.
     def patient_params
       params.require(:patient).permit(:first_name, :last_name, :phone)
