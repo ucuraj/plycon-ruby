@@ -1,0 +1,147 @@
+$font: 'Poppins', sans-serif;
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #ffefef; /* fallback for old browsers */
+  overflow-x: hidden;
+
+  height: 100%;
+
+  /* code to make all text unselectable */
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+/* Disables selector ring */
+body:not(.user-is-tabbing) button:focus,
+body:not(.user-is-tabbing) input:focus,
+body:not(.user-is-tabbing) select:focus,
+body:not(.user-is-tabbing) textarea:focus {
+  outline: none;
+}
+
+/* ########################################################## */
+
+.login-text {
+  color: #524c4c;
+
+
+  font: {
+    font-size: 30px;
+    font-weight: 600;
+  };
+  margin-bottom: 30px;
+}
+
+.flex-container {
+  width: 100vw;
+  height: 500px;
+  margin-top: 60px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-polycon {
+  max-width: 125px;
+  margin-bottom: 20px;
+}
+
+.polycon-title {
+  text-transform: uppercase;
+  background: linear-gradient(to right, #d03030 0%, #330867 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font: {
+    family: $font;
+    size: 40px;
+  };
+}
+
+.content-container {
+  width: 500px;
+  height: 100%;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 500px;
+  height: 100%;
+
+  margin-top: 5px;
+  padding-top: 20px;
+
+  border-radius: 12px;
+
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  background: white;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.199);
+}
+
+.subtitle {
+  font-size: 11px;
+
+  color: rgba(177, 177, 177, 0.3);
+}
+
+div.field,
+div.actions {
+  margin-bottom: 10px;
+}
+
+
+input {
+  border: none;
+  border-bottom: solid rgb(143, 143, 143) 1px;
+
+  margin-bottom: 30px;
+
+  background: none;
+  color: rgba(37, 37, 37, 0.8);
+
+  height: 35px;
+  width: 300px;
+}
+
+.submit-btn {
+  cursor: pointer;
+
+  border: none;
+  border-radius: 8px;
+
+  box-shadow: 2px 2px 7px #f22929;
+
+  background: #E22E56;
+  color: white;
+
+  width: 80px;
+
+  transition: all 1s;
+}
+
+.submit-btn:hover {
+  color: white;
+
+  box-shadow: none;
+}

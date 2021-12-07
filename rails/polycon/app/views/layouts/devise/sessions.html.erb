@@ -7,9 +7,8 @@
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
-  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-
+  <%= stylesheet_link_tag 'sessions', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_link_tag 'sessions', media: 'all', 'data-turbolinks-track': 'reload' %>
   <link href="https://fonts.googleapis.com/css?family=Poppins:700" rel="stylesheet">
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -20,10 +19,14 @@
 </head>
 
 <body>
+<%= yield %>
 <% flash.each do |name, msg| %>
   <%= javascript_tag "M.toast({html:'#{msg}'})" %>
 <% end %>
-<%= yield %>
+
+<%# flash.each do |name, msg| %>
+<%#= content_tag :div, msg, id: "flash_#{name}" %>
+<%# end %>
 <% if user_signed_in? %>
   Signed in as <%= current_user.name %>. Not you?
   <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
