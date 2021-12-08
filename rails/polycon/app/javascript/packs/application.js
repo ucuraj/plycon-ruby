@@ -8,7 +8,25 @@ import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 
 require('../src/index');
-import "channels"
+require('../src/main');
+
+
+import "bootstrap"
+import "bootstrap/scss/bootstrap.scss"
+import "bootstrap-icons/font/bootstrap-icons.css"
+import "boxicons"
+import "boxicons/css/boxicons.css"
+import "quill"
+import "quill/dist/quill.bubble.css"
+import "quill/dist/quill.snow.css"
+import "remixicon/fonts/remixicon.css"
+import "simple-datatables"
+import "simple-datatables/dist/style.css"
+import "tinymce"
+import "jquery"
+
+import "../css/application.scss";
+
 
 Rails.start()
 Turbolinks.start()

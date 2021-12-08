@@ -6,27 +6,27 @@
 
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
-
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+
+  <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+
   <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
 
-  <link href="https://fonts.googleapis.com/css?family=Poppins:700" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
 </head>
 
 <body>
-<% flash.each do |name, msg| %>
-  <%= javascript_tag "M.toast({html:'#{msg}'})" %>
-<% end %>
-<%= yield %>
-<% if user_signed_in? %>
-  Signed in as <%= current_user.name %>. Not you?
-  <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
-<% end %>
+<%= render "partials/header" %>
+<%= render "partials/sidebar" %>
+<main id="main" class="main">
+  <% flash.each do |name, msg| %>
+    <%= content_tag :div, msg, class: "alert alert-primary" %>
+  <% end %>
+  <%= yield %>
+</main>
 </body>
 </html>

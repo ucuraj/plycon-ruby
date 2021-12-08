@@ -1,0 +1,147 @@
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+  <ul class="sidebar-nav" id="sidebar-nav">
+
+    <li class="nav-item">
+      <%= link_to root_path, class: "nav-link" do %>
+        <i class="bi bi-grid"></i>
+        <span>Home</span>
+      <% end %>
+    </li>
+
+    <% if can? :read, Professional %>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#professionals-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-file-medical"></i><span>Professionals</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="professionals-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <%= link_to professionals_path do %>
+              <i class="bi bi-circle"></i><span>Show professionals</span>
+            <% end %>
+          </li>
+          <% if can? :create, Professional %>
+            <li>
+              <%= link_to new_professional_path do %>
+                <i class="bi bi-circle"></i><span>Add professionals</span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+
+    <% if can? :read, Appointment %>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#appointments-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Appointments</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="appointments-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <%= link_to appointments_path do %>
+              <i class="bi bi-circle"></i><span>Show appointments</span>
+            <% end %>
+          </li>
+          <% if can? :create, Appointment %>
+
+            <li>
+              <%= link_to new_appointment_path do %>
+                <i class="bi bi-circle"></i><span>Create appointments</span>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to "#" do %>
+                <i class="bi bi-circle"></i><span>Export day appointments</span>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to "#" do %>
+                <i class="bi bi-circle"></i><span>Export week appointments</span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+
+    <% if can? :read, Patient %>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#patients-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Patients</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="patients-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <%= link_to patients_path do %>
+              <i class="bi bi-circle"></i><span>Show patients</span>
+            <% end %>
+          </li>
+          <% if can? :create, Patient %>
+            <li>
+              <%= link_to new_patient_path do %>
+                <i class="bi bi-circle"></i><span>Add patient</span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+
+
+    <% if current_user.admin? %>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#users-nav" data-bs-toggle="collapse" href="#">
+          <i class="bx bx-user"></i><span>Users</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="users-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <%= link_to users_path do %>
+              <i class="bi bi-circle"></i><span>Show users</span>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to new_user_path do %>
+              <i class="bi bi-circle"></i><span>Add user</span>
+            <% end %>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#roles-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-gem"></i><span>Roles</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="roles-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <%= link_to roles_path do %>
+              <i class="bi bi-circle"></i><span>Show roles</span>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to new_role_path do %>
+              <i class="bi bi-circle"></i><span>Add rol</span>
+            <% end %>
+          </li>
+        </ul>
+      </li>
+    <% end %>
+
+    <li class="nav-heading">Useful Links</li>
+
+    <li class="nav-item">
+      <%= link_to current_user, class: "nav-link collapsed" do %>
+        <i class="bi bi-person"></i>
+        <span>My Profile</span>
+      <% end %>
+    </li><!-- End Profile Page Nav -->
+    <li class="nav-item">
+      <%= link_to destroy_user_session_path, method: :delete, class: "nav-link collapsed" do %>
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Sign Out</span>
+      <% end %>
+    </li>
+  </ul>
+
+</aside><!-- End Sidebar-->
