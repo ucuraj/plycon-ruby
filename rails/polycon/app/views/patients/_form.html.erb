@@ -1,32 +1,43 @@
-<%= form_with(model: patient) do |form| %>
-  <% if patient.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(patient.errors.count, "error") %> prohibited this patient from being saved:</h2>
+<section class="section">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Patient</h5>
+          <%= form_with(model: patient) do |form| %>
+            <% if patient.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= pluralize(patient.errors.count, "error") %> prohibited this patient from being saved:</h2>
 
-      <ul>
-        <% patient.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+                <ul>
+                  <% patient.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+            <div class="col-12">
+              <%= form.label :first_name, class: "col-sm-2 col-form-label" %>
+              <%= form.text_field :first_name, class: "form-control" %>
+            </div>
+
+            <div class="col-12">
+              <%= form.label :last_name, class: "col-sm-2 col-form-label" %>
+              <%= form.text_field :last_name, class: "form-control" %>
+            </div>
+
+            <div class="col-12">
+              <%= form.label :phone, class: "col-sm-2 col-form-label" %>
+              <%= form.text_field :phone, class: "form-control" %>
+            </div>
+
+            <br/>
+            <div class="actions">
+              <%= form.submit class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :first_name %>
-    <%= form.text_field :first_name %>
   </div>
-
-  <div class="field">
-    <%= form.label :last_name %>
-    <%= form.text_field :last_name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :phone %>
-    <%= form.text_field :phone %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+</section>

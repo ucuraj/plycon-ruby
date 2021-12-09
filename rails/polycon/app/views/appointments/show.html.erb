@@ -1,34 +1,7 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Observations:</strong>
-  <%= @appointment.observations %>
-</p>
-
-<p>
-  <strong>Date:</strong>
-  <%= @appointment.date %>
-</p>
-
-<p>
-  <strong>Patient:</strong>
-  <% if can? :read, Patient %>
-    <%= link_to "#{@appointment.patient.first_name} #{@appointment.patient.last_name}", @appointment.patient %>
-  <% else %>
-    <span><% "#{@appointment.patient.first_name} #{@appointment.patient.last_name}" %></span>
-  <% end %>
-</p>
-
-<p>
-  <strong>Professional:</strong>
-  <% if can? :read, Professional %>
-    <%= link_to "#{@appointment.professional.first_name} #{@appointment.professional.last_name}", @appointment.professional %>
-  <% else %>
-    <span><% "#{@appointment.professional.first_name} #{@appointment.professional.last_name}" %></span>
-  <% end %>
-</p>
-
-<% if can? :update, Appointment %>
-  <%= link_to 'Edit', edit_appointment_path(@appointment) %> |
-<% end %>
-<%= link_to 'Back', appointments_path %>
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+      <%= render 'show', appointment: @appointment, locals: { show_actions: true } %>
+    </div>
+  </div>
+</section>

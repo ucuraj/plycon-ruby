@@ -1,37 +1,52 @@
-<%= form_with(model: appointment) do |form| %>
-  <% if appointment.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(appointment.errors.count, "error") %> prohibited this appointment from being saved:</h2>
+<section class="section">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Appointment</h5>
 
-      <ul>
-        <% appointment.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+          <%= form_with(model: appointment) do |form| %>
+            <% if appointment.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= pluralize(appointment.errors.count, "error") %> prohibited this appointment from being
+                  saved:</h2>
+
+                <ul>
+                  <% appointment.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+
+            <div class="col-12">
+              <%= form.label :observations, class: "col-sm-2 col-form-label" %>
+              <%= form.text_field :observations, class: "form-control" %>
+            </div>
+
+            <div class="col-12">
+              <%= form.label :date, class: "col-sm-2 col-form-label" %>
+              <%= form.datetime_select :date, class: "form-control" %>
+            </div>
+
+            <div class="col-12">
+              <%= form.label :patient_id, class: "col-sm-2 col-form-label" %>
+              <%= form.text_field :patient_id, class: "form-control" %>
+            </div>
+
+            <div class="col-12">
+              <%= form.label :professional_id, class: "col-sm-2 col-form-label" %>
+              <%= form.text_field :professional_id, class: "form-control" %>
+            </div>
+
+            <br/>
+            <div class="actions">
+              <%= form.submit class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :observations %>
-    <%= form.text_field :observations %>
   </div>
-
-  <div class="field">
-    <%= form.label :date %>
-    <%= form.datetime_select :date %>
-  </div>
-
-  <div class="field">
-    <%= form.label :patient_id %>
-    <%= form.text_field :patient_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :professional_id %>
-    <%= form.text_field :professional_id %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+</section>

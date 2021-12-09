@@ -9,6 +9,7 @@ class ProfessionalsController < ApplicationController
 
   # GET /professionals/1 or /professionals/1.json
   def show
+    @appointments = Appointment.all.select { |i| i.professional_id == @professional.id }
   end
 
   # GET /professionals/new
@@ -55,8 +56,9 @@ class ProfessionalsController < ApplicationController
   end
 
   private
-    # Only allow a list of trusted parameters through.
-    def professional_params
-      params.require(:professional).permit(:first_name, :last_name)
-    end
+
+  # Only allow a list of trusted parameters through.
+  def professional_params
+    params.require(:professional).permit(:first_name, :last_name)
+  end
 end

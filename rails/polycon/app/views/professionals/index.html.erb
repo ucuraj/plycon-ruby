@@ -1,36 +1,60 @@
-<p id="notice"><%= notice %></p>
+<div class="pagetitle">
+  <h1>Professionals</h1>
+</div>
 
-<h1>Professionals</h1>
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
 
-<table>
-  <thead>
-  <tr>
-    <th>First name</th>
-    <th>Last name</th>
-    <th colspan="3"></th>
-  </tr>
-  </thead>
-
-  <tbody>
-  <% @professionals.each do |professional| %>
-    <tr>
-      <td><%= professional.first_name %></td>
-      <td><%= professional.last_name %></td>
-      <% if can? :read, Professional %>
-        <td><%= link_to 'Show', professional %></td>
-      <% end %>
-      <% if can? :update, Professional %>
-        <td><%= link_to 'Edit', edit_professional_path(professional) %></td>
-      <% end %>
-      <% if can? :destroy, Professional %>
-        <td><%= link_to 'Destroy', professional, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      <% end %>
-    </tr>
-  <% end %>
-  </tbody>
-</table>
-
-<br>
-<% if can? :create, Professional %>
-  <%= link_to 'New Professional', new_professional_path %>
-<% end %>
+      <div class="card">
+        <div class="card-body">
+          <div class="d-inline-flex justify-content-between w-100">
+            <div>
+              <h5 class="card-title">Professional list</h5>
+              <p>From this list you will be able to manage Polycon professionals</p>
+            </div>
+            <% if can? :create, Professional %>
+              <div class="mt-4 mb-4">
+                <%= link_to new_professional_path, class: "btn btn-success btn-sm" do %>
+                  <i class="bi bi-plus-circle me-1"></i>New Professional
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+          <table class="table datatable">
+            <thead>
+            <tr>
+              <th>First name</th>
+              <th>Last name</th>
+              <th colspan="3"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @professionals.each do |professional| %>
+              <tr>
+                <td><%= professional.first_name %></td>
+                <td><%= professional.last_name %></td>
+                <% if can? :read, Professional %>
+                  <td class="td-action">
+                    <%= link_to 'Show', professional, class: "badge bg-primary" %>
+                  </td>
+                <% end %>
+                <% if can? :update, Professional %>
+                  <td class="td-action">
+                    <%= link_to 'Edit', edit_professional_path(professional), class: "badge bg-warning" %>
+                  </td>
+                <% end %>
+                <% if can? :destroy, Professional %>
+                  <td class="td-action">
+                    <%= link_to 'Destroy', professional, method: :delete, data: { confirm: 'Are you sure?' }, class: "badge bg-danger" %>
+                  </td>
+                <% end %>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -23,3 +23,9 @@ los permisos estan seteados enm ability con la gema cancancan
 
 
 crud de roles,usuarios y permisos esta restringido unicamente a admins
+
+comandos para correr la app
+
+como agregué el template, licencias del template
+
+imagenes libres

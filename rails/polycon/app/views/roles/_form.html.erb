@@ -1,27 +1,40 @@
-<%= form_with(model: role) do |form| %>
-  <% if role.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(role.errors.count, "error") %> prohibited this role from being saved:</h2>
+<section class="section">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Role</h5>
+          <%= form_with(model: role) do |form| %>
+            <% if role.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= pluralize(role.errors.count, "error") %> prohibited this role from being saved:</h2>
 
-      <ul>
-        <% role.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+                <ul>
+                  <% role.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <div class="col-12">
+              <%= form.label :name, class: "col-sm-2 col-form-label" %>
+              <%= form.text_field :name, class: "form-control" %>
+            </div>
+
+            <div class="col-12">
+              <%= form.label :description, class: "col-sm-2 col-form-label" %>
+              <%= form.text_field :description, class: "form-control" %>
+            </div>
+
+
+            <br/>
+            <div class="actions">
+              <%= form.submit class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
   </div>
-
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_field :description %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+</section>

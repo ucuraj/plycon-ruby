@@ -9,6 +9,7 @@ class PatientsController < ApplicationController
 
   # GET /patients/1 or /patients/1.json
   def show
+    @appointments = Appointment.all.select { |i| i.patient_id == @patient.id }
   end
 
   # GET /patients/new
@@ -55,8 +56,9 @@ class PatientsController < ApplicationController
   end
 
   private
-    # Only allow a list of trusted parameters through.
-    def patient_params
-      params.require(:patient).permit(:first_name, :last_name, :phone)
-    end
+
+  # Only allow a list of trusted parameters through.
+  def patient_params
+    params.require(:patient).permit(:first_name, :last_name, :phone)
+  end
 end
