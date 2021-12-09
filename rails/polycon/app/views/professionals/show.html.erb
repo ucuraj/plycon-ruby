@@ -4,7 +4,6 @@
 <section class="section">
   <div class="row">
     <div class="col-lg-6">
-
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Professional data</h5>
@@ -65,5 +64,15 @@
         </div>
       </div>
     </div>
+    <% if @professional.appointments.count > 0 %>
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Actions</h5>
+            <%= link_to 'Cancel all appointments', cancel_all_appointments_path(professional: @professional), method: :delete, data: { confirm: 'Are you sure?' }, class: "badge bg-danger" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   </div>
 </section>

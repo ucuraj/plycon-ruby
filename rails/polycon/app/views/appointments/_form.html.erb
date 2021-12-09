@@ -8,14 +8,13 @@
           <%= form_with(model: appointment) do |form| %>
             <% if appointment.errors.any? %>
               <div id="error_explanation">
-                <h2><%= pluralize(appointment.errors.count, "error") %> prohibited this appointment from being
-                  saved:</h2>
-
-                <ul>
-                  <% appointment.errors.each do |error| %>
-                    <li><%= error.full_message %></li>
-                  <% end %>
-                </ul>
+                <h5><%= pluralize(appointment.errors.count, "error") %> prohibited this appointment from being
+                  saved:</h5>
+                <% appointment.errors.each do |error| %>
+                  <div class="alert alert-danger" role="alert">
+                    <%= error.full_message %>
+                  </div>
+                <% end %>
               </div>
             <% end %>
 
@@ -25,6 +24,16 @@
               <%= form.text_field :observations, class: "form-control" %>
             </div>
 
+<!--            <div class="col-12 mb-2">-->
+              <%#= form.label :date, class: "col-sm-2 col-form-label" %>
+              <%#= form.text_field :date, type: "date", class: "form-control" %>
+<!--            </div>-->
+
+<!--            <div class="col-12 mb-2">-->
+              <%#= form.label "Hour", class: "col-sm-2 col-form-label" %>
+              <%#= form.text_field :time, type: "time", class: "form-control" %>
+<!--            </div>-->
+
             <div class="col-12">
               <%= form.label :date, class: "col-sm-2 col-form-label" %>
               <%= form.datetime_select :date, class: "form-control" %>
@@ -32,12 +41,16 @@
 
             <div class="col-12">
               <%= form.label :patient_id, class: "col-sm-2 col-form-label" %>
-              <%= form.text_field :patient_id, class: "form-control" %>
+              <%= collection_select(
+                    :appointment, :patient_id, Patient.all, :id, :to_s, { prompt: true }, class: "form-control"
+                  ) %>
             </div>
 
             <div class="col-12">
               <%= form.label :professional_id, class: "col-sm-2 col-form-label" %>
-              <%= form.text_field :professional_id, class: "form-control" %>
+              <%= collection_select(
+                    :appointment, :professional_id, Professional.all, :id, :to_s, { prompt: true }, class: "form-control"
+                  ) %>
             </div>
 
             <br/>

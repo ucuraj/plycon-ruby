@@ -45,7 +45,7 @@
                   <td class="td-action"><%= link_to 'Edit', edit_appointment_path(appointment), class: "badge bg-warning" %></td>
                 <% end %>
                 <% if can? :destroy, Appointment %>
-                  <td class="td-action"><%= link_to 'Destroy', appointment, method: :delete, data: { confirm: 'Are you sure?' }, class: "badge bg-danger" %></td>
+                  <td class="td-action"><%= link_to 'Cancel', appointment, method: :delete, data: { confirm: 'Are you sure?' }, class: "badge bg-danger" %></td>
                 <% end %>
               </tr>
             <% end %>

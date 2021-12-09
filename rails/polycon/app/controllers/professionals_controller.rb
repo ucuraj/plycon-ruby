@@ -55,6 +55,14 @@ class ProfessionalsController < ApplicationController
     end
   end
 
+  def cancel_all_appointments
+    Appointment.delete_by_professional(params[:professional])
+    respond_to do |format|
+      format.html { redirect_to professionals_url, notice: "Professional was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
   private
 
   # Only allow a list of trusted parameters through.

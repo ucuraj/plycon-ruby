@@ -4,6 +4,14 @@
 
 * System dependencies
 
+    - rails ~> 6.1.4
+    - ruby '2.7.4'
+    - sqlite
+
+* Installation
+
+    - execute `bundle install` and `yarn install` in root's project
+
 * Configuration
 
 * **Database creation**
@@ -15,12 +23,8 @@
     - bin/rails db:seed
 * ...
 
-
-use las gemas cancan y devise para autenticar y proteger la aplicacion
-agregue un modelo nuevo que es el paciente. 
-se restingio el registro de usuarios, LOGIN CON USERNAME
-los permisos estan seteados enm ability con la gema cancancan
-
+use las gemas cancan y devise para autenticar y proteger la aplicacion agregue un modelo nuevo que es el paciente. se
+restingio el registro de usuarios, LOGIN CON USERNAME los permisos estan seteados enm ability con la gema cancancan
 
 crud de roles,usuarios y permisos esta restringido unicamente a admins
 

@@ -1256,3 +1256,7 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 13px;
     color: #012970;
 }
+
+.alert {
+    padding: 0.5rem 1rem;
+}

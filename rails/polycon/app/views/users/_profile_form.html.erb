@@ -1,13 +1,13 @@
 <%= form_with(model: user) do |form| %>
   <% if user.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <h5><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h5>
 
-      <ul>
-        <% user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+      <% user.errors.each do |error| %>
+        <div class="alert alert-danger" role="alert">
+          <%= error.full_message %>
+        </div>
+      <% end %>
     </div>
   <% end %>
 
@@ -27,7 +27,7 @@
     <%= form.label :role_id, class: "col-md-4 col-lg-3 col-form-label" %>
     <div class="col-md-8 col-lg-9">
       <%= collection_select(
-            :user, :role_id, Role.all, :id, :name, { prompt: true }
+            :user, :role_id, Role.all, :id, :name, { prompt: true }, class: "form-control"
           ) %>
     </div>
   </div>

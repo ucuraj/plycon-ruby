@@ -1,45 +1,55 @@
-<%= form_with(model: user) do |form| %>
-  <% if user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+<section class="section">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">User</h5>
+          <%= form_with(model: user) do |form| %>
+            <% if user.errors.any? %>
+              <div id="error_explanation">
+                <h5><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h5>
 
-      <ul>
-        <% user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+                <% user.errors.each do |error| %>
+                  <div class="alert alert-danger" role="alert">
+                    <%= error.full_message %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+
+            <div class="field">
+              <%= form.label "Username", class: "col-sm-2 col-form-label" %>
+              <%= form.text_field :name, class: "form-control" %>
+            </div>
+            <div class="field">
+              <%= form.label :email, class: "col-sm-2 col-form-label" %><br/>
+              <%= form.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+            </div>
+            <div class="field">
+              <%= form.label :role_id, class: "col-sm-2 col-form-label" %>
+              <%= collection_select(
+                    :user, :role_id, Role.all, :id, :name, { prompt: true }, class: "form-control"
+                  ) %>
+            </div>
+            <div class="field">
+              <%= form.label :password, class: "col-sm-2 col-form-label" %>
+              <% if @minimum_password_length %>
+                <em>(<%= @minimum_password_length %> characters minimum)</em>
+              <% end %><br/>
+              <%= form.password_field :password, autocomplete: "new-password", class: "form-control" %>
+            </div>
+
+            <div class="field">
+              <%= form.label :password_confirmation, class: "col-sm-2 col-form-label" %><br/>
+              <%= form.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
+            </div>
+            <div class="actions">
+              <%= form.submit class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
-  <% end %>
+  </div>
+</section>
 
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </div>
-  <div class="field">
-    <%= form.label :email %><br />
-    <%= form.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
-  <div class="field">
-    <%= form.label :role_id %>
-    <%= collection_select(
-          :user, :role_id, Role.all, :id, :name, { prompt: true }
-        ) %>
-  </div>
-  <div class="field">
-    <%= form.label :password %>
-    <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= form.password_field :password, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= form.label :password_confirmation %><br />
-    <%= form.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>

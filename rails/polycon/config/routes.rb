@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   end
 
   resources :professionals
+  delete 'cancel_all_appointments' => "professionals#cancel_all_appointments"
   resources :appointments
   resources :patients
 end
