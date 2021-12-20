@@ -9,7 +9,7 @@ class ProfessionalsController < ApplicationController
 
   # GET /professionals/1 or /professionals/1.json
   def show
-    @appointments = Appointment.all.select { |i| i.professional_id == @professional.id }.select { |i| i.date >= Date.today }
+    @appointments = Appointment.select { |i| i.professional_id == @professional.id }.select { |i| i.date >= Date.today }
 
   end
 
@@ -49,10 +49,16 @@ class ProfessionalsController < ApplicationController
 
   # DELETE /professionals/1 or /professionals/1.json
   def destroy
-    @professional.destroy
-    respond_to do |format|
-      format.html { redirect_to professionals_url, notice: "Professional was successfully destroyed." }
-      format.json { head :no_content }
+    if @professional.destroy
+      respond_to do |format|
+        format.html { redirect_to professionals_url, notice: "Professional was successfully destroyed." }
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to professionals_url, notice: "Cannot delete Professional with appointments ." }
+        format.json { head :no_content }
+      end
     end
   end
 

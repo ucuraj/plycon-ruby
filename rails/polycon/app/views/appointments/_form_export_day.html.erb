@@ -1,0 +1,35 @@
+<section class="section">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Appointment Export</h5>
+
+          <%= form_tag(export_day_appointments_path) do |form| %>
+
+            <div class="col-12">
+              <%= form.label :observations, class: "col-sm-2 col-form-label" %>
+              <%= form.text_field :observations, class: "form-control" %>
+            </div>
+
+            <div class="col-12">
+              <%= form.label :date, class: "col-sm-2 col-form-label" %>
+            </div>
+
+            <div class="col-12">
+              <%= form.label :professional_id, class: "col-sm-2 col-form-label" %>
+              <%= collection_select(
+                    :appointment, :professional_id, Professional.all, :id, :to_s, { prompt: true }, class: "form-control"
+                  ) %>
+            </div>
+
+            <br/>
+            <div class="actions">
+              <%= form.submit class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
