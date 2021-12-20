@@ -9,7 +9,8 @@ class ProfessionalsController < ApplicationController
 
   # GET /professionals/1 or /professionals/1.json
   def show
-    @appointments = Appointment.all.select { |i| i.professional_id == @professional.id }
+    @appointments = Appointment.all.select { |i| i.professional_id == @professional.id }.select { |i| i.date >= Date.today }
+
   end
 
   # GET /professionals/new
@@ -58,7 +59,7 @@ class ProfessionalsController < ApplicationController
   def cancel_all_appointments
     Appointment.delete_by_professional(params[:professional])
     respond_to do |format|
-      format.html { redirect_to professionals_url, notice: "Professional was successfully destroyed." }
+      format.html { redirect_to professionals_url, notice: "All appointments cancelled." }
       format.json { head :no_content }
     end
   end

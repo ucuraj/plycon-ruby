@@ -17,7 +17,6 @@ class Professional < ApplicationRecord
   private
 
   def cannot_delete_with_appointments
-    puts appointments.count
     errors.add(:base, 'Cannot delete Professional with appointments') if appointments.count > 0
   end
 
