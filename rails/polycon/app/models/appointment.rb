@@ -53,13 +53,13 @@ class Appointment < ApplicationRecord
 
   ##
   #
-  def self.get_day_appointments
+  def self.get_day_appointments(date = Date.today, professional_id = nil)
     appointments = APPOINTMENTS_RANGES.map { |x| [x, []] }.to_h
 
     appointments.keys.each do |key|
       begin
-        d = Time.parse("#{Date.today} #{key}")
-        app = self.get_appointment_by_date d
+        d = Time.parse("#{date} #{key}")
+        app = self.get_appointment_by_date d, professional_id
         if app.nil?
           app = ""
         end
@@ -77,7 +77,10 @@ class Appointment < ApplicationRecord
     Appointment.where(date: (day.change({ hour: 8, min: 00 }))..day.change({ hour: 16, min: 00 }))
   end
 
-  def self.get_appointment_by_date(date)
+  def self.get_appointment_by_date(date, professional_id)
+    if professional_id and professional_id != ""
+      return Appointment.where(date: date, professional_id: professional_id).first
+    end
     Appointment.where(date: date).first
   end
 

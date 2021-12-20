@@ -14,5 +14,6 @@ Rails.application.routes.draw do
   resources :appointments
   get 'export_day_appointments' => "appointments#export_day_file"
   get 'export_day_appointments_pre' => "appointments#export_day_pre"
+  post 'export_day_appointments_pre' => "appointments#export_day_post"
   resources :patients
 end

@@ -4,25 +4,19 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Appointment Export</h5>
-
-          <%= form_tag(export_day_appointments_path) do |form| %>
-
+          <%= form_for "Export Appointments", path:"export_day_appointments_path" do |form| %>
             <div class="col-12">
-              <%= form.label :observations, class: "col-sm-2 col-form-label" %>
-              <%= form.text_field :observations, class: "form-control" %>
+              <%= form.label :export_date, :date, class: "col-sm-2 col-form-label" %>
+              <%= form.date_field :date, :required => true%>
             </div>
-
-            <div class="col-12">
-              <%= form.label :date, class: "col-sm-2 col-form-label" %>
-            </div>
-
+            <br/>
             <div class="col-12">
               <%= form.label :professional_id, class: "col-sm-2 col-form-label" %>
+              <span class="fw-bold">(Optional field)</span>
               <%= collection_select(
-                    :appointment, :professional_id, Professional.all, :id, :to_s, { prompt: true }, class: "form-control"
+                    :professional, :professional_id, Professional.all, :id, :to_s, { prompt: true }, class: "form-control"
                   ) %>
             </div>
-
             <br/>
             <div class="actions">
               <%= form.submit class: "btn btn-primary" %>
