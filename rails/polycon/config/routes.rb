@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   delete 'cancel_all_appointments' => "professionals#cancel_all_appointments"
 
   resources :appointments
-  get 'export_day_appointments' => "appointments#export_day"
-  # get 'export_day_appointments_pre' => "appointments#export_day_pre"
+  get 'export_day_appointments' => "appointments#export_day_file"
+  get 'export_day_appointments_pre' => "appointments#export_day_pre"
   resources :patients
 end

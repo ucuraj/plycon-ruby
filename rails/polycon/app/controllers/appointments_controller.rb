@@ -78,6 +78,37 @@ class AppointmentsController < ApplicationController
     end
   end
 
+  def export_day_file
+    date = Date.today
+    title = "Appointments Grid (#{date})"
+
+    template_title = "output_day_#{date.to_s}"
+    file_output_dir = "#{Rails.root}/public/"
+    template_file = File.join(Dir.pwd, "app/views/layouts/export/appointments-grid.html.erb")
+    template = self.output(template_title, file_output_dir, template_file, { appointments_list: Appointment.get_day_appointments, professionals: Professional.all, day: true, title: title })
+
+    send_file("#{Rails.root}/public/#{template_title}.html", filename:"#{template_title}.html", type:"application/html")
+  end
+
+  def export_day_pre
+
+  end
+
+  def export_week
+    date = Date.today
+    title = "Appointments Grid (#{date})"
+
+    template_title = "output_day_#{date.to_s}"
+    file_output_dir = "Escritorio"
+    template_file = File.join(Dir.pwd, "app/views/layouts/export/appointments-grid.html.erb")
+    template = self.output(template_title, file_output_dir, template_file, { appointments_list: Appointment.get_day_appointments, professionals: Professional.all, day: true, title: title })
+
+    respond_to do |format|
+      format.html { redirect_to appointments_url, notice: "Appointments was successfully exported." }
+      format.json { head :no_content }
+    end
+  end
+
   private
 
   # Only allow a list of trusted parameters through.
@@ -90,10 +121,9 @@ class AppointmentsController < ApplicationController
     erb = ERB.new(html)
     out = erb.result_with_hash(**options)
 
-    dirname = File.join("/home/ucuraj", output_dir)
-    unless File.directory?(dirname)
-      FileUtils.mkdir_p(dirname)
-    end
-    File.write(File.join(dirname, "#{name}.html"), out)
+    # unless File.directory?(dirname)
+    #   FileUtils.mkdir_p(dirname)
+    # end
+    File.write(File.join(output_dir, "#{name}.html"), out)
   end
 end
