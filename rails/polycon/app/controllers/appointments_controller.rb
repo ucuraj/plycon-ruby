@@ -64,49 +64,38 @@ class AppointmentsController < ApplicationController
 
   # GET /appointments/export_day or /appointments/export_day.json
   def export_day
-    date = Date.today
-    title = "Appointments Grid (#{date})"
+  end
 
-    template_title = "output_day_#{date.to_s}"
-    file_output_dir = "Escritorio"
-    template_file = File.join(Dir.pwd, "app/views/layouts/export/appointments-grid.html.erb")
-    template = self.output(template_title, file_output_dir, template_file, { appointments_list: Appointment.get_day_appointments, professionals: Professional.all, day: true, title: title })
-
-    respond_to do |format|
-      format.html { redirect_to appointments_url, notice: "Appointments was successfully exported." }
-      format.json { head :no_content }
-    end
+  # GET /appointments/export_day or /appointments/export_day.json
+  def export_day_post
+    date = params.require(:"Export Appointments").permit(:date)["date"]
+    professional = params.require(:"professional").permit(:professional_id)
+    template_title = export_day_action(date, professional["professional_id"])
+    send_file("#{Rails.root}/public/#{template_title}.html", filename: "#{template_title}.html", type: "application/html")
   end
 
   def export_day_file
     date = Date.today
-    title = "Appointments Grid (#{date})"
-
-    template_title = "output_day_#{date.to_s}"
-    file_output_dir = "#{Rails.root}/public/"
-    template_file = File.join(Dir.pwd, "app/views/layouts/export/appointments-grid.html.erb")
-    template = self.output(template_title, file_output_dir, template_file, { appointments_list: Appointment.get_day_appointments, professionals: Professional.all, day: true, title: title })
-
-    send_file("#{Rails.root}/public/#{template_title}.html", filename:"#{template_title}.html", type:"application/html")
+    template_title = export_day_action(date)
+    send_file("#{Rails.root}/public/#{template_title}.html", filename: "#{template_title}.html", type: "application/html")
   end
 
   def export_day_pre
 
   end
 
-  def export_week
-    date = Date.today
+  def export_day_action(date, professional_id = nil)
     title = "Appointments Grid (#{date})"
-
     template_title = "output_day_#{date.to_s}"
-    file_output_dir = "Escritorio"
+    file_output_dir = "#{Rails.root}/public/"
     template_file = File.join(Dir.pwd, "app/views/layouts/export/appointments-grid.html.erb")
-    template = self.output(template_title, file_output_dir, template_file, { appointments_list: Appointment.get_day_appointments, professionals: Professional.all, day: true, title: title })
-
-    respond_to do |format|
-      format.html { redirect_to appointments_url, notice: "Appointments was successfully exported." }
-      format.json { head :no_content }
+    if professional_id and professional_id != ""
+      professionals = [Professional.find_by_id(professional_id)]
+    else
+      professionals = Professional.all
     end
+    template = self.output(template_title, file_output_dir, template_file, { appointments_list: Appointment.get_day_appointments(date, professional_id = nil), professionals: professionals, day: true, title: title })
+    template_title
   end
 
   private
