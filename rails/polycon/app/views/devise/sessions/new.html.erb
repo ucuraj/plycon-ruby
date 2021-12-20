@@ -1,0 +1,25 @@
+<div class="flex-container">
+  <div class="content-container">
+    <div class="form-container">
+      <%#= image_tag("polycon-logo.png", alt: "Polycon logo", class: "logo-polycon") %>
+      <h3 class="polycon-title">POLYCON</h3>
+      <h5 class="login-text">Login</h5>
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <div class="field">
+          <%= f.label :name %><br/>
+          <%= f.text_field :name, autofocus: true, autocomplete: "username" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :password %><br/>
+          <%= f.password_field :password, autocomplete: "current-password" %>
+        </div>
+
+        <div class="actions">
+          <%= f.submit "Log in", class:"submit-btn" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

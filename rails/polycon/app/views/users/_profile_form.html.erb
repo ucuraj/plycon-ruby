@@ -1,0 +1,56 @@
+<%= form_with(model: user) do |form| %>
+  <% if user.errors.any? %>
+    <div id="error_explanation">
+      <h5><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h5>
+
+      <% user.errors.each do |error| %>
+        <div class="alert alert-danger" role="alert">
+          <%= error.full_message %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="row mb-3">
+    <%= form.label "username", class: "col-md-4 col-lg-3 col-fclassorm-label" %>
+    <div class="col-md-8 col-lg-9">
+      <%= form.text_field :name %>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <%= form.label :email, class: "col-md-4 col-lg-3 col-form-label" %>
+    <div class="col-md-8 col-lg-9">
+      <%= form.email_field :email, autofocus: true, autocomplete: "email" %>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <%= form.label :role_id, class: "col-md-4 col-lg-3 col-form-label" %>
+    <div class="col-md-8 col-lg-9">
+      <%= collection_select(
+            :user, :role_id, Role.all, :id, :name, { prompt: true }, class: "form-control"
+          ) %>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <%= form.label :password, class: "col-md-4 col-lg-3 col-form-label" %>
+
+    <% if @minimum_password_length %>
+      <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %>
+    <div class="col-md-8 col-lg-9">
+      <%= form.password_field :password, autocomplete: "new-password" %>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <%= form.label :password_confirmation, class: "col-md-4 col-lg-3 col-form-label" %>
+    <div class="col-md-8 col-lg-9">
+      <%= form.password_field :password_confirmation, autocomplete: "new-password" %>
+    </div>
+  </div>
+
+
+  <div class="actions">
+    <%= form.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

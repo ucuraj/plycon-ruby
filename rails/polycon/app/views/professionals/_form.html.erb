@@ -1,0 +1,40 @@
+<section class="section">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Professional</h5>
+          <%= form_with(model: professional) do |form| %>
+            <% if professional.errors.any? %>
+              <div id="error_explanation">
+                <h5><%= pluralize(professional.errors.count, "error") %> prohibited this professional from being
+                  saved:</h5>
+                 <% professional.errors.each do |error| %>
+                    <div class="alert alert-danger" role="alert">
+                      <%= error.full_message %>
+                    </div>
+                  <% end %>
+              </div>
+            <% end %>
+
+            <div class="col-12">
+              <%= form.label :first_name, class: "col-sm-2 col-form-label" %>
+              <%= form.text_field :first_name, class: "form-control" %>
+            </div>
+
+            <div class="col-12">
+              <%= form.label :last_name, class: "col-sm-2 col-form-label" %>
+              <%= form.text_field :last_name, class: "form-control" %>
+            </div>
+
+
+            <br/>
+            <div class="actions">
+              <%= form.submit class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

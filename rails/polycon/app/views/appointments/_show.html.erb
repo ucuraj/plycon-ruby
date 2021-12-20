@@ -1,0 +1,52 @@
+<div class="card mb-3">
+  <div class="row g-0">
+    <div class="col-md-2 justify-content-center align-items-center align-content-center d-inline-flex bg-dark bg-opacity-75">
+      <div class="text-center">
+        <h1 class="text-white-50"> <%= @appointment.date.strftime("%A, %d") %></h1>
+        <h4 class="text-white-50"> <%= @appointment.date.strftime("%B %Y") %></h4>
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div class="card-body  <% unless locals[:show_actions] %>mt-3<% end %>">
+        <% if locals[:show_actions] %>
+          <h5 class="card-title">Appointment data</h5>
+        <% end %>
+        <p class="card-text">
+          <strong>Observations:</strong>
+          <%= @appointment.observations %>
+        </p>
+
+        <p class="card-text">
+          <strong>Date:</strong>
+          <%= @appointment.date %>
+        </p>
+
+        <p class="card-text">
+          <strong>Patient:</strong>
+          <% if can? :read, Patient %>
+            <%= link_to "#{@appointment.patient.first_name} #{@appointment.patient.last_name}", @appointment.patient %>
+          <% else %>
+            <span><% "#{@appointment.patient.first_name} #{@appointment.patient.last_name}" %></span>
+          <% end %>
+        </p>
+
+        <p class="card-text">
+          <strong>Professional:</strong>
+          <% if can? :read, Professional %>
+            <%= link_to "#{@appointment.professional.first_name} #{@appointment.professional.last_name}", @appointment.professional %>
+          <% else %>
+            <span><% "#{@appointment.professional.first_name} #{@appointment.professional.last_name}" %></span>
+          <% end %>
+        </p>
+
+        <% if locals[:show_actions] %>
+          <% if can? :update, Appointment %>
+            <%= link_to 'Edit', edit_appointment_path(@appointment), class: "btn btn-primary btn-sm" %>
+          <% end %>
+          <%= link_to 'Back', appointments_path, class: "btn btn-secondary btn-sm" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+

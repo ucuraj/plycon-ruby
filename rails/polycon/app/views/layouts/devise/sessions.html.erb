@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Polycon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag 'sessions', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_link_tag 'sessions', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <link href="https://fonts.googleapis.com/css?family=Poppins:700" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+</head>
+
+<body>
+<%= yield %>
+<% flash.each do |name, msg| %>
+  <%= javascript_tag "M.toast({html:'#{msg}'})" %>
+<% end %>
+
+<%# flash.each do |name, msg| %>
+<%#= content_tag :div, msg, id: "flash_#{name}" %>
+<%# end %>
+<% if user_signed_in? %>
+  Signed in as <%= current_user.name %>. Not you?
+  <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
+<% end %>
+</body>
+</html>
